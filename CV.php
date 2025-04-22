@@ -15,10 +15,10 @@
     <main class="create">
     <section class="create-section">
         <h2 class="fade-in" style="animation-delay: 0s;">Coordonnées:</h2>
-            <p class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Mon mail est questeclement@gmail.com</p>
-            <p class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Mon numéro de téléphone portable est 0766319831</p>
-            <p class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'habite à Calais 75 Boulevard Léon Gambetta dans le 62</p>
-            <p class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'ai eu 18 ans le 16 novembre 2025</p>
+            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Mon mail est questeclement@gmail.com</li>
+            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Mon numéro de téléphone portable est 0766319831</li>
+            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'habite à Calais 75 Boulevard Léon Gambetta dans le 62</li>
+            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'ai eu 18 ans le 16 novembre 2025</li>
     </section>
 
     <section class="create-section">
