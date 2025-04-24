@@ -305,3 +305,63 @@ footer {
       font-size: 1.1rem;
   }
 }
+
+/*                        FORMULAIRE DE CONTACT                      */
+
+
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.8rem;
+  border-radius: 12px;
+  border: 1px solid var(--accent);
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.form-button {
+  text-align: center;
+}
+
+.confirmation {
+  color: var(--accent);
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .contact-form {
+    padding: 0.5rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 0.95rem;
+  }
+
+  .form-button button {
+    width: 100%;
+  }
+}
