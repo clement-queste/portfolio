@@ -1,12 +1,12 @@
 :root {
-  --bg-color: #ffffff;
-  --text-color: #1a1a1a;
+  --bg-color: #faf1d9;
+  --text-color: #620000;
   --accent: #333333;
 }
 
 body.dark {
-  --bg-color: #0f0f11;
-  --text-color: #f0f0f0;
+  --bg-color: #620000;
+  --text-color: #faf1d9;
   --accent: #888888;
 }
 
