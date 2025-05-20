@@ -1,35 +1,40 @@
 <?php
-require 'bdd1.php';
-
+require 'bdd.php';
 $id = $_GET['id'] ?? '';
-$logiciel = current(array_filter($listelogiciels, fn($l) => $l['id'] === $id));
+
+// Recherche de la personne
+$sql = 'SELECT * FROM logiciels WHERE id=:id';
+$statement = $db->prepare($sql);
+$statement->execute(compact('id'));
+$logiciel = $statement->fetch();
 
 if (!$logiciel) {
-    header('Location: personnes.php');
+    header('location:>CV.php');
     exit();
 }
 
-$page_title = 'Afficher - ' . htmlspecialchars($logiciel['logi']);
+$page_title = "Afficher-$logiciel[logiciel]";
+
 ?>
-<?php
-$page_title = 'Accueil'?>
 <!DOCTYPE html>
 <html lang='fr'>
 
-<?php require 'head.php';?>
+<?php require 'head.php' ?>
 
 <body>
-  <?php require 'header.php'; ?>
+    <?php require 'header.php' ?>
 
-  <main>
-    <h1><?= ($logiciel['logi']) ?></h1>
+    <main>
+        <h1>Afficher</h1>
 
-    <section>
-      <img src="<?= ($logiciel['img']) ?>" alt="<?= ($logiciel['logi']) ?>" />
-      <p><?=($logiciel['txt']) ?></p>
-    </section>
-  </main>
+        <section>
+            <img src='images/cv/<?= $logiciel['image'] ?>' alt='img <?= $logiciel['logiciel'] ?>' />
+            <?= $logiciel['logiciel'] ?>
+            <?= $logiciel['description'] ?>
+        </section>
+    </main>
 
-  <?php require 'footer.php'; ?>
+    <?php require 'footer.php' ?>
 </body>
+
 </html>

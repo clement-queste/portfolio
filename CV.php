@@ -1,5 +1,14 @@
 <?php
-$page_title = 'CV'?>
+require 'bdd.php';
+// création de la requête
+$sql = 'SELECT * FROM personnes';
+// envoi de la requête et récupération du résultat
+$statement = $db->prepare($sql);
+$statement->execute();
+
+$liste_logiciel = $statement->fetchAll();
+$page_title = 'CV'
+?>
 <!DOCTYPE html>
 <html lang='fr'>
 
@@ -31,21 +40,29 @@ $page_title = 'CV'?>
 
     <section class="create-section">
     <h2 class="fade-in" style="animation-delay: 0s;">Compétences :</h2>
-    <ul>
-    <?php foreach ($listelogiciels as $logi): ?>
-      <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">
-        <a href="logiciel_show.php?id=<?= urlencode($logi['id']) ?>">
-          <img 
-            src="<?= htmlspecialchars($logi['img']) ?>" 
-          />
-        </a>
-        <?= htmlspecialchars($logi['logi']) ?>
-      </li>
-    <?php endforeach; ?>
-    </ul>
+    <a href='create.php'><button>Ajouter</button></a>
+        <ul>
+            <?php
+            foreach ($liste_logiciel as $logiciel) {
+                ?>
+                <li>
+                    <a href='show.php?id=<?= $logiciel['id'] ?>'>
+                        <img src='iamges/cv/<?= $logiciel['image'] ?>' alt='img <?= $logiciel['logiciel'] ?>' />
+                    </a>
+                    <?= $logiciel['logiciel'] ?>
+                    <?= $logiciel['description'] ?>
+                    <a href='delete.php?id=<?= $logiciel['id'] ?>'>
+                        <img src='images/cv/css.png' alt='supprimer' />
+                    </a>
+                    <a href='update.php?id=<?= $logiciel['id'] ?>'>
+                        <img src='images/cv/css.png' alt='modifier' />
+                    </a>
+                </li>
+                <?php
+            }
+            ?>
+        </ul>
     </section>
-
-
 
     <section class="create-section">
         <h2 class="fade-in" style="animation-delay: 0s;">Langues:</h2>
