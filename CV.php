@@ -1,14 +1,9 @@
+<?php
+$page_title = 'CV'?>
 <!DOCTYPE html>
-<html lang="fr">
-<?php require 'bdd1.php';?>
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CV</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="CSS/styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
-</head>
+<html lang='fr'>
+
+<?php require 'head.php';?>
 <body>
 
     <?php include('header.php'); ?>
@@ -35,13 +30,22 @@
     </section>
 
     <section class="create-section">
-        <h2 class="fade-in" style="animation-delay: 0s;">Compétences:</h2>
-            <ul>
-                <?php foreach($listelogiciels as $logi){ ?>
-                <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;"><?= $logi['logi'] ?></li>
-                <?php } ?>
-            </ul>
+    <h2 class="fade-in" style="animation-delay: 0s;">Compétences :</h2>
+    <ul>
+    <?php foreach ($listelogiciels as $logi): ?>
+      <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">
+        <a href="logiciel_show.php?id=<?= urlencode($logi['id']) ?>">
+          <img 
+            src="<?= htmlspecialchars($logi['img']) ?>" 
+          />
+        </a>
+        <?= htmlspecialchars($logi['logi']) ?>
+      </li>
+    <?php endforeach; ?>
+    </ul>
     </section>
+
+
 
     <section class="create-section">
         <h2 class="fade-in" style="animation-delay: 0s;">Langues:</h2>
