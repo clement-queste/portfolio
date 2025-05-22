@@ -11,10 +11,10 @@ $page_title = 'CV';
 ?>
 <!DOCTYPE html>
 <html lang='fr'>
-<?php require 'head.php'; ?>
+<?php require '../app/views/head.php'; ?>
 
 <body>
-    <?php include('header.php'); ?>
+    <?php include('../app/views/header.php'); ?>
 
     <main class="create">
 
@@ -92,7 +92,7 @@ $page_title = 'CV';
 
     </main>
 
-    <?php include('footer.php'); ?>
+    <?php include('../app/views/footer.php'); ?>
     <script src="script.js"></script>
 </body>
 </html>

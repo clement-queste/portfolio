@@ -3,10 +3,10 @@ $page_title = 'À Propos'?>
 <!DOCTYPE html>
 <html lang='fr'>
 
-<?php require 'head.php';?>
+<?php require '../app/views/head.php';?>
 <body>
 
-    <?php include('header.php'); ?>
+    <?php include('../app/views/header.php'); ?>
 
     <main class="about">
         <section class="about-section">
@@ -58,7 +58,7 @@ $page_title = 'À Propos'?>
         </section>
     </main>
 
-    <?php include('footer.php'); ?>
+    <?php include('../app/views/footer.php'); ?>
 
     <script src="script.js"></script>
 </body>
