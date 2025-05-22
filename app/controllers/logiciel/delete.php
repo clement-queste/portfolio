@@ -28,3 +28,5 @@ if ($logiciel) {
 
 header('Location: CV.php');
 exit();
+
+require '../app/views/logiciel/delete.php';
