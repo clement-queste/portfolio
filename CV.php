@@ -1,95 +1,99 @@
 <?php
 require 'bdd.php';
-// création de la requête
-$sql = 'SELECT * FROM personnes';
-// envoi de la requête et récupération du résultat
+
+// Requête pour récupérer les logiciels
+$sql = 'SELECT * FROM logiciels';
 $statement = $db->prepare($sql);
 $statement->execute();
-
 $liste_logiciel = $statement->fetchAll();
-$page_title = 'CV'
+
+$page_title = 'CV';
 ?>
 <!DOCTYPE html>
 <html lang='fr'>
+<?php require 'head.php'; ?>
 
-<?php require 'head.php';?>
 <body>
-
     <?php include('header.php'); ?>
 
     <main class="create">
-    <section class="create-section">
-        <h2 class="fade-in" style="animation-delay: 0s;">Coordonnées:</h2>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Mon mail est questeclement@gmail.com</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Mon numéro de téléphone portable est 0766319831</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'habite à Calais 75 Boulevard Léon Gambetta dans le 62</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'ai eu 18 ans le 16 novembre 2025</li>
-    </section>
 
-    <section class="create-section">
-        <h2 class="fade-in" style="animation-delay: 0s;">Diplômes et Formation:</h2>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'ai obtenue mon Brevet des collèges Mention très bien en Juillet 2021 à Bernard Chochoy Norrent-Fontes.</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'ai obtenue mon Baccalauréat Général Mention Assez Bien en Juillet 2024 à Anatole France Lillers.</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Je suis en cours d'optention du dîplome Deust WMI depuis septembre 2024 à l'ULCO de Calais.</li>
-    </section>
+        <section class="create-section">
+            <h2 class="fade-in">Coordonnées :</h2>
+            <ul>
+                <li class="fade-in fade-in-delay">Mon mail est questeclement@gmail.com</li>
+                <li class="fade-in fade-in-delay">Mon numéro de téléphone portable est 07 66 31 98 31</li>
+                <li class="fade-in fade-in-delay">J'habite à Calais, 75 Boulevard Léon Gambetta (62)</li>
+                <li class="fade-in fade-in-delay">J'ai eu 18 ans le 16 novembre 2025</li>
+            </ul>
+        </section>
 
-    <section class="create-section">
-        <h2 class="fade-in" style="animation-delay: 0s;">Expériences Professionnelles:</h2>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'ai fait un stage aux Cartonnages Vaillant en juin 2022 à Trezennes.</li>
-    </section>
+        <section class="create-section">
+            <h2 class="fade-in">Diplômes et Formation :</h2>
+            <ul>
+                <li class="fade-in fade-in-delay">Brevet des collèges Mention Très Bien – Juillet 2021, Collège Bernard Chochoy</li>
+                <li class="fade-in fade-in-delay">Baccalauréat Général Mention Assez Bien – Juillet 2024, Lycée Anatole France</li>
+                <li class="fade-in fade-in-delay">En cours : DEUST WMI (2024–2026), ULCO Calais</li>
+            </ul>
+        </section>
 
-    <section class="create-section">
-    <h2 class="fade-in" style="animation-delay: 0s;">Compétences :</h2>
-    <a href='create.php'><button>Ajouter</button></a>
-        <ul>
-            <?php
-            foreach ($liste_logiciel as $logiciel) {
-                ?>
-                <li>
-                    <a href='show.php?id=<?= $logiciel['id'] ?>'>
-                        <img src='iamges/cv/<?= $logiciel['image'] ?>' alt='img <?= $logiciel['logiciel'] ?>' />
-                    </a>
-                    <?= $logiciel['logiciel'] ?>
-                    <?= $logiciel['description'] ?>
-                    <a href='delete.php?id=<?= $logiciel['id'] ?>'>
-                        <img src='images/cv/css.png' alt='supprimer' />
-                    </a>
-                    <a href='update.php?id=<?= $logiciel['id'] ?>'>
-                        <img src='images/cv/css.png' alt='modifier' />
-                    </a>
-                </li>
-                <?php
-            }
-            ?>
-        </ul>
-    </section>
+        <section class="create-section">
+            <h2 class="fade-in">Expériences Professionnelles :</h2>
+            <ul>
+                <li class="fade-in fade-in-delay">Stage – Cartonnages Vaillant, Juin 2022 à Trézennes</li>
+            </ul>
+        </section>
 
-    <section class="create-section">
-        <h2 class="fade-in" style="animation-delay: 0s;">Langues:</h2>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Anglais j'ai le niveau B2</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Espagnol j'ai le niveau B2</li>
-    </section>
+        <section class="create-section">
+            <h2 class="fade-in">Compétences :</h2>
+            <a href='create.php'><button>Ajouter un logiciel</button></a>
+            <ul>
+                <?php foreach ($liste_logiciel as $logiciel): ?>
+                    <li class="fade-in fade-in-delay">
+                        <a href='show.php?id=<?= htmlspecialchars($logiciel['id']) ?>'>
+                            <img src='images/cv/<?= htmlspecialchars($logiciel['image']) ?>' alt='Image de <?= htmlspecialchars($logiciel['logiciel']) ?>' />
+                        </a>
+                        <p><strong><?= htmlspecialchars($logiciel['logiciel']) ?></strong><br>
+                        <?= htmlspecialchars($logiciel['description']) ?></p>
+                        <a href='update.php?id=<?= $logiciel['id'] ?>'><button>Modifier</button></a>
+                        <a href='delete.php?id=<?= $logiciel['id'] ?>'><button>Supprimer</button></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </section>
 
-    <section class="create-section">
-        <h2 class="fade-in" style="animation-delay: 0s;">Qualités:</h2>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Je sais Travailler en équipe</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Je suis quelqu'un de très motivé</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">Je suis quelqu'un de très curieux</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'ai beaucoup de Créativité</li>
-    </section>
+        <section class="create-section">
+            <h2 class="fade-in">Langues :</h2>
+            <ul>
+                <li class="fade-in fade-in-delay">Anglais : niveau B2</li>
+                <li class="fade-in fade-in-delay">Espagnol : niveau B2</li>
+            </ul>
+        </section>
 
-    <section class="create-section">
-        <h2 class="fade-in" style="animation-delay: 0s;">Loisirs:</h2>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'ai pratiqué le Basket-Ball pendant une année au club de Lillers.</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'adore les vêtements et la couture</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">La Music me passione de son écoute à la création</li>
-            <li class="fade-in fade-in-delay" style="animation-delay: 0.5s;">J'ai pratiqué le Football pendant 10 années au club de Norrent-Fontes.</li>
-    </section>
+        <section class="create-section">
+            <h2 class="fade-in">Qualités :</h2>
+            <ul>
+                <li class="fade-in fade-in-delay">Capacité à travailler en équipe</li>
+                <li class="fade-in fade-in-delay">Motivation</li>
+                <li class="fade-in fade-in-delay">Curiosité</li>
+                <li class="fade-in fade-in-delay">Créativité</li>
+            </ul>
+        </section>
+
+        <section class="create-section">
+            <h2 class="fade-in">Loisirs :</h2>
+            <ul>
+                <li class="fade-in fade-in-delay">Basket-ball (1 an, club de Lillers)</li>
+                <li class="fade-in fade-in-delay">Couture et mode</li>
+                <li class="fade-in fade-in-delay">Musique : écoute et création</li>
+                <li class="fade-in fade-in-delay">Football (10 ans, club de Norrent-Fontes)</li>
+            </ul>
+        </section>
+
     </main>
 
-
     <?php include('footer.php'); ?>
-
     <script src="script.js"></script>
 </body>
 </html>
+

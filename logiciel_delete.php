@@ -1,59 +1,30 @@
 <?php
 require 'bdd.php';
+
 $id = $_GET['id'] ?? '';
 
-// Recherche de la personne
-$sql = 'SELECT * FROM logiciels WHERE id=:id';
-$statement = $db->prepare($sql);
-$statement->execute(compact('id'));
-$logiciel = $statement->fetch();
-
-if (!$logiciel) {
-    header('location:personnes.php');
+if (!$id) {
+    header('Location: CV.php');
     exit();
 }
 
-$page_title = "Supprimer-$personne[nom]";
+// Récupérer le nom de l'image avant suppression
+$sql = 'SELECT image FROM logiciels WHERE id = :id';
+$stmt = $db->prepare($sql);
+$stmt->execute(['id' => $id]);
+$logiciel = $stmt->fetch();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['supprimer'])) {
-    // suppression photo
-    if (file_exists("images/$logiciel[image]")) {
-        unlink("images/$logiciel[image]");
+if ($logiciel) {
+    $imagePath = 'images/cv/' . $logiciel['image'];
+    if (file_exists($imagePath)) {
+        unlink($imagePath); // Supprime l'image du dossier
     }
 
-    // suppression de la personne
-    $sql = 'DELETE FROM lociciels WHERE id = :id';
-    $statement = $db->prepare($sql);
-    $statement->execute(compact('id'));
-
-    header('location:CV.php');
-    exit();
+    // Supprimer l'enregistrement de la base
+    $sql = 'DELETE FROM logiciels WHERE id = :id';
+    $stmt = $db->prepare($sql);
+    $stmt->execute(['id' => $id]);
 }
-?>
-<!DOCTYPE html>
-<html lang='fr'>
 
-<?php require 'head.php'; ?>
-
-<body>
-    <?php require 'header.php'; ?>
-
-    <main>
-        <h1>Supprimer</h1>
-        <form action='' method='post'>
-            <section>
-                <img src='photos/<?= $personne['photo'] ?>' alt='photo <?= $personne['nom'] ?>' />
-                <?= $personne['nom'] ?>
-                <?= $personne['prenom'] ?>
-                <?= $personne['age'] ?> ans
-            </section>
-            <div>
-                <button type='submit' name='supprimer'>Supprimer</button>
-                <a href='personnes.php'><button type='button'>Annuler</button></a>
-            </div>
-        </form>
-    </main>
-    <?php require 'footer.php'; ?>
-</body>
-
-</html>
+header('Location: CV.php');
+exit();

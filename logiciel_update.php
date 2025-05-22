@@ -1,110 +1,74 @@
 <?php
 require 'bdd.php';
 
-$id = $_GET['id'] ?? '';
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    die("Identifiant manquant.");
+}
 
-// Recherche de la personne
-$sql = 'SELECT * FROM personnes WHERE id=:id';
-$statement = $db->prepare($sql);
-$statement->execute(compact('id'));
-$personne = $statement->fetch();
+$id = intval($_GET['id']);
 
-if (!$personne) {
-    header('location:personnes.php');
+// Traitement du formulaire
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $logiciel = $_POST['logiciel'];
+    $image = $_POST['image'];
+    $description = $_POST['description'];
+    $slug = $_POST['slug'];
+
+    $sql = "UPDATE logiciels SET logiciel = :logiciel, image = :image, description = :description, slug = :slug WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([
+        ':logiciel' => $logiciel,
+        ':image' => $image,
+        ':description' => $description,
+        ':slug' => $slug,
+        ':id' => $id
+    ]);
+
+    header('Location: CV.php');
     exit();
 }
 
-$page_title = "Modifier-$personne[nom]";
+// Récupération des données existantes
+$sql = "SELECT * FROM logiciels WHERE id = :id";
+$stmt = $db->prepare($sql);
+$stmt->execute([':id' => $id]);
+$logiciel = $stmt->fetch();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['modifier'])) {
-    // récupération des données du formulaire
-    $nom = $_POST['nom'] ?? '';
-    $prenom = $_POST['prenom'] ?? '';
-    $age = (int) $_POST['age'] ?? 0;
-    $slug = $_POST['slug'] ?? '';
-    $photo = $personne['photo'];
-
-    // renommage de la photo si changement de slug
-    if ($slug != $personne['slug']) {
-        $url = "photos/$personne[photo]";
-        $photo = $id . "_" . $slug . "." . strtolower(pathinfo($url, PATHINFO_EXTENSION));
-        if (file_exists($url)) {
-            rename($url, "photos/$photo");
-        }
-    }
-    // modification de la personne
-    $sql = "UPDATE personnes SET 
-                nom = :nom,
-                prenom = :prenom,
-                age = :age,
-                slug = :slug,
-                photo = :photo                
-            WHERE id = :id";
-
-    $statement = $db->prepare($sql);
-    $statement->execute(compact('nom', 'prenom', 'age', 'slug', 'photo', 'id'));
-
-    // modification de la photo si nouvelle photo
-    if (isset($_FILES['photo']) && is_uploaded_file($_FILES['photo']['tmp_name'])) {
-        // suppression ancienne photo
-        if (file_exists("photos/$photo")) {
-            unlink("photos/$photo");
-        }
-        // ajout de la nouvelle photo
-        $photo = $id . "_" . $slug . "." . strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
-        $origine = $_FILES['photo']['tmp_name'];
-        $destination = "photos/$photo";
-        move_uploaded_file($origine, $destination);
-    }
-
-    header('location:personnes.php');
-    exit();
+if (!$logiciel) {
+    die("Logiciel non trouvé.");
 }
 ?>
-<!DOCTYPE html>
-<html lang='fr'>
 
+<!DOCTYPE html>
+<html lang="fr">
 <?php require 'head.php'; ?>
 
 <body>
-    <?php require 'header.php'; ?>
-    <main>
-        <h1>Modifier</h1>
-        <form action='' method='post' enctype='multipart/form-data'>
+<?php include('header.php'); ?>
 
-            <div>
-                <span>Nom</span>
-                <input type='text' name='nom' value='<?= $personne['nom'] ?>'>
-            </div>
+<main class="create">
+    <section class="create-section">
+        <h2>Modifier un logiciel</h2>
+        <form method="post">
+            <label for="logiciel">Nom du logiciel :</label><br>
+            <input type="text" name="logiciel" id="logiciel" value="<?= htmlspecialchars($logiciel['logiciel']) ?>" required><br><br>
 
-            <div>
-                <span>Prénom</span>
-                <input type='text' name='prenom' value='<?= $personne['prenom'] ?>'>
-            </div>
+            <label for="image">Nom de l'image (ex: photoshop.png) :</label><br>
+            <input type="text" name="image" id="image" value="<?= htmlspecialchars($logiciel['image']) ?>" required><br><br>
 
-            <div>
-                <span>Age</span>
-                <input type='text' name='age' value='<?= $personne['age'] ?>'>
-            </div>
+            <label for="description">Description :</label><br>
+            <textarea name="description" id="description" required><?= htmlspecialchars($logiciel['description']) ?></textarea><br><br>
 
-            <div>
-                <span>Slug</span>
-                <input type='text' name='slug' value='<?= $personne['slug'] ?>'>
-            </div>
+            <label for="slug">Slug :</label><br>
+            <input type="text" name="slug" id="slug" value="<?= htmlspecialchars($logiciel['slug']) ?>" required><br><br>
 
-            <div>
-                <img src='photos/<?= $personne['photo'] ?>' alt='photo <?= $personne['nom'] ?>' />
-                <input type='file' name='photo'>
-            </div>
-
-            <div>
-                <button type='submit' name='modifier'>Modifier</button>
-                <a href='personnes.php'><button type='button'>Annuler</button></a>
-            </div>
-
+            <button type="submit">Mettre à jour</button>
+            <a href="CV.php"><button type="button">Annuler</button></a>
         </form>
-    </main>
-    <?php require 'footer.php'; ?>
-</body>
+    </section>
+</main>
 
+<?php include('footer.php'); ?>
+<script src="script.js"></script>
+</body>
 </html>

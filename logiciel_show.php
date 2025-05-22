@@ -9,7 +9,7 @@ $statement->execute(compact('id'));
 $logiciel = $statement->fetch();
 
 if (!$logiciel) {
-    header('location:>CV.php');
+    header('location:CV.php');
     exit();
 }
 
@@ -28,7 +28,7 @@ $page_title = "Afficher-$logiciel[logiciel]";
         <h1>Afficher</h1>
 
         <section>
-            <img src='images/cv/<?= $logiciel['image'] ?>' alt='img <?= $logiciel['logiciel'] ?>' />
+            <img src='images/cv/<?= $logiciel['image'] ?>' alt='image <?= $logiciel['logiciel'] ?>' />
             <?= $logiciel['logiciel'] ?>
             <?= $logiciel['description'] ?>
         </section>

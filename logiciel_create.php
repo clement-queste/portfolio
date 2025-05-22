@@ -1,98 +1,85 @@
 <?php
 require 'bdd.php';
-$page_title = 'Ajouter';
+$page_title = 'Ajouter un logiciel';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ajouter'])) {
+    // Récupération des données du formulaire
+    $logiciel = trim($_POST['logiciel'] ?? '');
+    $description = trim($_POST['description'] ?? '');
+    $slug = trim($_POST['slug'] ?? '');
 
-    // récupération des données du formulaire
-    $nom = $_POST['nom'] ?? '';
-    $prenom = $_POST['prenom'] ?? '';
-    $age = (int) $_POST['age'] ?? 0;
-    $slug = $_POST['slug'] ?? '';
-
-    // création de la requête
-    $sql = "INSERT INTO personnes
-              (nom, prenom, age, slug)
-            VALUES
-              (:nom, :prenom, :age, :slug)";
-
-    // envoi de la requête
+    // Insertion dans la base de données
+    $sql = "INSERT INTO logiciels (logiciel, description, slug) 
+            VALUES (:logiciel, :description, :slug)";
     $statement = $db->prepare($sql);
-    $statement->execute(compact('nom', 'prenom', 'age', 'slug'));
+    $statement->execute(compact('logiciel', 'description', 'slug'));
 
     $id = $db->lastInsertId();
 
-    // récupération de la photo si elle existe
-    if (isset($_FILES['photo']) && is_uploaded_file($_FILES['photo']['tmp_name'])) {
-        $photo = $id . "_" . $slug . "." . strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
-        $origine = $_FILES['photo']['tmp_name'];
-        $destination = "photos/$photo";
-        move_uploaded_file($origine, $destination);
-        // si la photo n'existe pas on copie la photo par defaut
+    // Gestion de l’image
+    $image = $id . "_" . $slug . ".png"; // Valeur par défaut
+    if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
+        $extension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+        $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (in_array($extension, $allowed)) {
+            $image = $id . "_" . $slug . "." . $extension;
+            move_uploaded_file($_FILES['image']['tmp_name'], "images/cv/$image");
+        }
     } else {
-        $photo = $id . "_" . $slug . ".png";
-        $origine = 'photos/photo.png';
-        $destination = "photos/$photo";
-        copy($origine, $destination);
+        // Image par défaut
+        copy('photos/photo.png', "images/cv/$image");
     }
-    // modification photo
-    $sql = "UPDATE personnes SET 
-            photo = :photo                  
-          WHERE id = :id";
 
-    // envoi de la requête
+    // Mise à jour de l’image dans la base
+    $sql = "UPDATE logiciels SET image = :image WHERE id = :id";
     $statement = $db->prepare($sql);
-    $statement->execute(compact('photo', 'id'));
+    $statement->execute(compact('image', 'id'));
 
-    // redirection
-    header('location:personnes.php');
+    // Redirection
+    header('Location: CV.php');
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang='fr'>
-
 <?php require 'head.php'; ?>
 
 <body>
-    <?php require 'header.php'; ?>
-    <main>
-        <h1>Ajouter</h1>
-        <form action='' method='post' enctype='multipart/form-data'>
+<?php require 'header.php'; ?>
 
-            <div>
-                <span>Nom</span>
-                <input type='text' name='nom'>
-            </div>
+<main>
+    <h1>Ajouter un logiciel</h1>
+    <form action='' method='post' enctype='multipart/form-data'>
 
-            <div>
-                <span>Prénom</span>
-                <input type='text' name='prenom'>
-            </div>
+        <div>
+            <label for='logiciel'>Nom du logiciel</label>
+            <input type='text' name='logiciel' id='logiciel' required>
+        </div>
 
-            <div>
-                <span>Age</span>
-                <input type='text' name='age'>
-            </div>
+        <div>
+            <label for='description'>Description</label>
+            <textarea name='description' id='description' rows='4' required></textarea>
+        </div>
 
-            <div>
-                <span>Slug</span>
-                <input type='text' name='slug'>
-            </div>
+        <div>
+            <label for='slug'>Slug (sans espace ni accent)</label>
+            <input type='text' name='slug' id='slug' required>
+        </div>
 
-            <div>
-                <span>Photo</span>
-                <input type='file' name='photo'>
-            </div>
+        <div>
+            <label for='image'>Image</label>
+            <input type='file' name='image' id='image' accept=".jpg,.jpeg,.png,.gif,.webp">
+        </div>
 
-            <div>
-                <button type='submit' name='ajouter'>Ajouter</button>
-                <a href='personnes.php'><button type='button'>Annuler</button></a>
-            </div>
+        <div>
+            <button type='submit' name='ajouter'>Ajouter</button>
+            <a href='CV.php'><button type='button'>Annuler</button></a>
+        </div>
 
-        </form>
-    </main>
-    <?php require 'footer.php'; ?>
+    </form>
+</main>
+
+<?php require 'footer.php'; ?>
 </body>
-
 </html>
