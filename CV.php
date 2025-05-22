@@ -46,7 +46,7 @@ $page_title = 'CV';
 
         <section class="create-section">
             <h2 class="fade-in">Compétences :</h2>
-            <a href='create.php'><button>Ajouter un logiciel</button></a>
+            <a href='logiciel_create.php'><button>Ajouter un logiciel</button></a>
             <ul>
                 <?php foreach ($liste_logiciel as $logiciel): ?>
                     <li class="fade-in fade-in-delay">
