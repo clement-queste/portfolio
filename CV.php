@@ -50,13 +50,13 @@ $page_title = 'CV';
             <ul>
                 <?php foreach ($liste_logiciel as $logiciel): ?>
                     <li class="fade-in fade-in-delay">
-                        <a href='show.php?id=<?= htmlspecialchars($logiciel['id']) ?>'>
+                        <a href='logiciel_show.php?id=<?= htmlspecialchars($logiciel['id']) ?>'>
                             <img src='images/cv/<?= htmlspecialchars($logiciel['image']) ?>' alt='Image de <?= htmlspecialchars($logiciel['logiciel']) ?>' />
                         </a>
                         <p><strong><?= htmlspecialchars($logiciel['logiciel']) ?></strong><br>
                         <?= htmlspecialchars($logiciel['description']) ?></p>
-                        <a href='update.php?id=<?= $logiciel['id'] ?>'><button>Modifier</button></a>
-                        <a href='delete.php?id=<?= $logiciel['id'] ?>'><button>Supprimer</button></a>
+                        <a href='logiciel_update.php?id=<?= $logiciel['id'] ?>'><button>Modifier</button></a>
+                        <a href='logiciel_delete.php?id=<?= $logiciel['id'] ?>'><button>Supprimer</button></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
